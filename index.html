@@ -119,6 +119,7 @@ td.day-cell{color:var(--ink3);font-size:11px}
 .task-smg{background:var(--task5-bg);color:var(--task5)}
 .task-calibration{background:var(--task6-bg);color:var(--task6)}
 .task-daily{background:#E6F4F1;color:#0A6B5A}
+.task-duplicate{background:#FCE7F3;color:#9D174D}
 
 .freq-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink3);background:var(--page);padding:.1rem .38rem;border-radius:3px;border:1px solid var(--border)}
 
@@ -232,6 +233,7 @@ td.day-cell{color:var(--ink3);font-size:11px}
       <button class="pill pill-task" data-task="SMG KPIs">SMG KPIs</button>
       <button class="pill pill-task" data-task="Calibration Plan">Calibration Plan</button>
       <button class="pill pill-task" data-task="Daily Production">Daily Prod. Report</button>
+      <button class="pill pill-task" data-task="Duplicate Removal">Duplicate Removal</button>
     </div>
     <span class="filter-label" style="margin-left:.5rem">Month</span>
     <select id="month-filter">
@@ -303,6 +305,13 @@ const TASK_META = {
     refs: [
       { label: 'Ref Video', url: 'https://usclarity-my.sharepoint.com/:v:/p/qualitycontrol/IQDeZOeWS_DRSqy-44vcGAcZAQYDHrs5u3oCwvzxD9_uROo?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=Gqmp4Z' }
     ]
+  },
+  'Duplicate Removal': {
+    link: null,  // multiple sheets - shown in refs
+    refs: [
+      { label: 'SMG Dashboard', url: 'https://usclarity-my.sharepoint.com/:x:/r/personal/qualitycontrol_usclarity_com/Documents/SMG%20Dashboard.xlsx?d=wba812908897145e0bf5c324b120bf41b&csf=1&web=1&e=hIc1cV' },
+      { label: 'Calls Audit Data', url: 'https://usclarity-my.sharepoint.com/:x:/r/personal/qualitycontrol_usclarity_com/Documents/Calls%20Audit%20Data%20(Master%20Sheet)%20-%20Updated.xlsx?d=w25473065a9924dd5b911974c2a9c088e&csf=1&web=1&e=8AixgT' }
+    ]
   }
 };
 
@@ -370,13 +379,31 @@ months.forEach((mo, mi) => {
     RAW.push({ date: fmt(d), task: 'Daily Production', senior: SENIORS[(mi+3) % 4],   freq: 'Monthly', day: '1st Biz Day' });
 });
 
+// Duplicate Removal: every other day (bi-daily), skip weekends
+let dupDay = new Date(start);
+let dupIndex = 0;
+while (dupDay <= end) {
+  if (dupDay.getDay() !== 0 && dupDay.getDay() !== 6) {  // skip weekends
+    const dayName = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dupDay.getDay()];
+    RAW.push({
+      date: fmt(dupDay),
+      task: 'Duplicate Removal',
+      senior: SENIORS[dupIndex % 4],
+      freq: 'Bi-Daily',
+      day: dayName
+    });
+    dupIndex++;
+  }
+  dupDay.setDate(dupDay.getDate() + 2);  // skip one day each time
+}
+
 RAW.sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : a.task < b.task ? -1 : 1);
 
 // ─── UI HELPERS ───────────────────────────────────────────────────────────────
 const TASK_CLASS = {
   'WFH Sheet':'task-wfh','QC Headcount':'task-headcount','Payments Sheet':'task-payments',
   'Coaching List':'task-coaching','SMG KPIs':'task-smg','Calibration Plan':'task-calibration',
-  'Daily Production':'task-daily'
+  'Daily Production':'task-daily','Duplicate Removal':'task-duplicate'
 };
 const SENIOR_CLASS = {
   Wakeel:'senior-wakeel',Abdallah:'senior-abdallah',Leen:'senior-leen',Enmanuel:'senior-enmanuel'
