@@ -411,39 +411,55 @@ function linksHtml(task, compact) {
     html += `<a class="link-btn ref-btn" href="${meta.refs[0].url}" target="_blank" rel="noopener">${isVideo ? FILM_ICON : EXT_ICON} ${meta.refs[0].label}</a>`;
   } else {
     // Multiple refs — show a dropdown trigger
-    const taskKey = task.replace(/\s+/g,'-');
-    html += `<button class="link-btn ref-multi" onclick="toggleRefPanel(event,'${taskKey}')" data-task="${task}">${FILM_ICON} Refs (${meta.refs.length})</button>`;
+    html += `<button class="link-btn ref-multi" data-task="${task}" data-ref-id="ref-${Math.random().toString(36).substr(2,9)}">${FILM_ICON} Refs (${meta.refs.length})</button>`;
   }
   return html;
 }
 
 // ─── REF PANEL ────────────────────────────────────────────────────────────────
 let activeRefPanel = null;
-function toggleRefPanel(e, taskKey) {
-  e.stopPropagation();
-  const btn = e.currentTarget;
-  const task = btn.dataset.task;
-  const panel = document.getElementById('ref-panel');
-  const linksDiv = document.getElementById('ref-panel-links');
-  const meta = TASK_META[task];
-  if (!meta) return;
-  if (activeRefPanel === taskKey && panel.classList.contains('open')) {
-    panel.classList.remove('open');
+
+// Use event delegation - listen on document for .ref-multi button clicks
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.ref-multi');
+  const refPanel = document.getElementById('ref-panel');
+  const refPanelLinks = document.getElementById('ref-panel-links');
+  
+  if (btn) {
+    // User clicked a Refs button
+    e.stopPropagation();
+    e.preventDefault();
+    
+    const task = btn.dataset.task;
+    const refId = btn.dataset.refId;
+    const meta = TASK_META[task];
+    
+    if (!meta) return;
+    
+    // If this button is active and panel is open, close it
+    if (activeRefPanel === refId && refPanel.classList.contains('open')) {
+      refPanel.classList.remove('open');
+      activeRefPanel = null;
+      return;
+    }
+    
+    // Open panel for this button
+    activeRefPanel = refId;
+    refPanelLinks.innerHTML = meta.refs.map(r =>
+      `<a href="${r.url}" target="_blank" rel="noopener">${FILM_ICON} ${r.label}</a>`
+    ).join('');
+    
+    // Position panel using viewport coordinates (NO scrollY - panel is position:fixed)
+    const rect = btn.getBoundingClientRect();
+    refPanel.style.left = Math.min(rect.left, window.innerWidth - 260) + 'px';
+    refPanel.style.top = (rect.bottom + 4) + 'px';
+    refPanel.classList.add('open');
+  } 
+  else if (!refPanel.contains(e.target)) {
+    // User clicked outside both button and panel - close panel
+    refPanel.classList.remove('open');
     activeRefPanel = null;
-    return;
   }
-  activeRefPanel = taskKey;
-  linksDiv.innerHTML = meta.refs.map(r =>
-    `<a href="${r.url}" target="_blank" rel="noopener">${FILM_ICON} ${r.label}</a>`
-  ).join('');
-  const rect = btn.getBoundingClientRect();
-  panel.style.left = Math.min(rect.left, window.innerWidth - 260) + 'px';
-  panel.style.top  = (rect.bottom + window.scrollY + 4) + 'px';
-  panel.classList.add('open');
-}
-document.addEventListener('click', () => {
-  document.getElementById('ref-panel').classList.remove('open');
-  activeRefPanel = null;
 });
 
 // ─── STATE & FILTERING ───────────────────────────────────────────────────────
