@@ -330,6 +330,13 @@ function getThursdaysInRange(start, end) {
   while (d <= end) { thursdays.push(new Date(d)); d.setDate(d.getDate() + 7); }
   return thursdays;
 }
+function getFridaysInRange(start, end) {
+  const fridays = [];
+  let d = new Date(start);
+  while (d.getDay() !== 5) d.setDate(d.getDate() + 1);
+  while (d <= end) { fridays.push(new Date(d)); d.setDate(d.getDate() + 7); }
+  return fridays;
+}
 function fmt(d) { return d.toISOString().slice(0, 10); }
 
 const SENIORS = ['Wakeel', 'Abdallah', 'Leen', 'Enmanuel'];
@@ -337,10 +344,11 @@ const start = new Date('2026-05-18');
 const end   = new Date('2026-12-28');
 const mondays   = getMondaysInRange(start, end);
 const thursdays = getThursdaysInRange(start, end);
+const fridays   = getFridaysInRange(start, end);
 const RAW = [];
 
-mondays.forEach((d, i) => {
-  RAW.push({ date: fmt(d), task: 'WFH Sheet',      senior: SENIORS[i % 4],        freq: 'Weekly',     day: 'Monday' });
+fridays.forEach((d, i) => {
+  RAW.push({ date: fmt(d), task: 'WFH Sheet',      senior: SENIORS[i % 4],        freq: 'Weekly',     day: 'Friday' });
 });
 mondays.forEach((d, i) => {
   RAW.push({ date: fmt(d), task: 'QC Headcount',   senior: SENIORS[(i+2) % 4],    freq: 'Weekly',     day: 'Monday' });
