@@ -337,7 +337,12 @@ function getFridaysInRange(start, end) {
   while (d <= end) { fridays.push(new Date(d)); d.setDate(d.getDate() + 7); }
   return fridays;
 }
-function fmt(d) { return d.toISOString().slice(0, 10); }
+function fmt(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
 
 const SENIORS = ['Wakeel', 'Abdallah', 'Leen', 'Enmanuel'];
 const start = new Date('2026-05-18');
@@ -361,11 +366,17 @@ thursdays.forEach((d, i) => {
 });
 
 const months = Array.from({length:8}, (_, i) => new Date(2026, i+4, 1));
+const COACHING_ROTATION = ['Wakeel', 'Abdallah', 'Enmanuel', 'Leen'];  // Leen last
 months.forEach((mo, mi) => {
+  // Find 4th business day of the month
   let d = new Date(mo);
-  while (d.getDay() !== 1) d.setDate(d.getDate() + 1);
+  let count = 0;
+  while (count < 4) {
+    if (d.getDay() !== 0 && d.getDay() !== 6) count++;
+    if (count < 4) d.setDate(d.getDate() + 1);
+  }
   if (d <= end && d >= start)
-    RAW.push({ date: fmt(d), task: 'Coaching List',    senior: SENIORS[mi % 4],       freq: 'Monthly', day: '1st Week Mon' });
+    RAW.push({ date: fmt(d), task: 'Coaching List',    senior: COACHING_ROTATION[mi % 4], freq: 'Monthly', day: '4th Business Day' });
 });
 months.forEach((mo, mi) => {
   let d = new Date(mo);
