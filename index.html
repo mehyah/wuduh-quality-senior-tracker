@@ -387,10 +387,9 @@ months.forEach((mo, mi) => {
 });
 months.forEach((mo, mi) => {
   let d = new Date(mo);
-  while (d.getDay() !== 1) d.setDate(d.getDate() + 1);
-  d.setDate(d.getDate() + 7);
+  while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() + 1);
   if (d <= end && d >= start)
-    RAW.push({ date: fmt(d), task: 'Calibration Plan', senior: SENIORS[(mi+1) % 4],   freq: 'Monthly', day: '2nd Week Mon' });
+    RAW.push({ date: fmt(d), task: 'Calibration Plan', senior: SENIORS[(mi+1) % 4],   freq: 'Monthly', day: '1st Biz Day' });
 });
 months.forEach((mo, mi) => {
   let d = new Date(mo);
