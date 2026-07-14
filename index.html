@@ -17,8 +17,8 @@
   --wuduh-white:#FFFFFF;
 
   --wakeel:#003087;      --wakeel-bg:#E6EDF8;  --wakeel-mid:#1A4A9F;
-  --abdallah:#007A5E;    --abdallah-bg:#E0F4EF;--abdallah-mid:#009E79;
-  --leen:#B0005E;        --leen-bg:#FCE8F2;    --leen-mid:#D4246F;
+  --shadi:#007A5E;    --shadi-bg:#E0F4EF;--shadi-mid:#009E79;
+  --jana:#B0005E;        --jana-bg:#FCE8F2;    --jana-mid:#D4246F;
   --enmanuel:#00AEEF;    --enmanuel-bg:#E0F5FF;--enmanuel-mid:#0099D4;
 
   --task1:#4A3AE8;  --task1-bg:#EEEAFF;
@@ -70,8 +70,8 @@ header h1 em{color:var(--wuduh-cyan);font-style:normal}
 .pill.active{color:#fff!important;border-color:transparent!important}
 .pill-all.active{background:var(--wuduh-navy)}
 .pill-wakeel.active{background:var(--wakeel)}
-.pill-abdallah.active{background:var(--abdallah)}
-.pill-leen.active{background:var(--leen)}
+.pill-shadi.active{background:var(--shadi)}
+.pill-jana.active{background:var(--jana)}
 .pill-enmanuel.active{background:var(--enmanuel)}
 .pill-task.active{background:var(--wuduh-navy-mid)}
 .view-toggle{margin-left:auto;display:flex;border:1.5px solid var(--border);border-radius:7px;overflow:hidden}
@@ -107,8 +107,8 @@ td.day-cell{color:var(--ink3);font-size:11px}
 
 .senior-tag{display:inline-block;padding:.12rem .5rem;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.01em}
 .senior-wakeel{background:var(--wakeel-bg);color:var(--wakeel)}
-.senior-abdallah{background:var(--abdallah-bg);color:var(--abdallah)}
-.senior-leen{background:var(--leen-bg);color:var(--leen)}
+.senior-shadi{background:var(--shadi-bg);color:var(--shadi)}
+.senior-jana{background:var(--jana-bg);color:var(--jana)}
 .senior-enmanuel{background:var(--enmanuel-bg);color:var(--enmanuel)}
 
 .task-tag{display:inline-flex;align-items:center;padding:.12rem .5rem;border-radius:4px;font-size:11px;font-weight:600}
@@ -130,8 +130,8 @@ td.day-cell{color:var(--ink3);font-size:11px}
 .link-btn svg{flex-shrink:0}
 .link-btn.ref-btn{color:var(--ink3)}
 .link-btn.ref-btn:hover{background:var(--ink2);color:#fff;border-color:var(--ink2)}
-.link-btn.ref-multi{color:var(--leen)}
-.link-btn.ref-multi:hover{background:var(--leen);color:#fff;border-color:var(--leen)}
+.link-btn.ref-multi{color:var(--jana)}
+.link-btn.ref-multi:hover{background:var(--jana);color:#fff;border-color:var(--jana)}
 .na-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink3)}
 
 /* CARDS */
@@ -206,8 +206,8 @@ td.day-cell{color:var(--ink3);font-size:11px}
       <span class="filter-label">Senior</span>
       <button class="pill pill-all active" data-senior="all">All</button>
       <button class="pill pill-wakeel" data-senior="Wakeel">Wakeel</button>
-      <button class="pill pill-abdallah" data-senior="Abdallah">Abdallah</button>
-      <button class="pill pill-leen" data-senior="Leen">Leen</button>
+      <button class="pill pill-shadi" data-senior="Shadi">Shadi</button>
+      <button class="pill pill-jana" data-senior="Jana">Jana</button>
       <button class="pill pill-enmanuel" data-senior="Enmanuel">Enmanuel</button>
     </div>
     <div class="view-toggle">
@@ -345,7 +345,7 @@ function fmt(d) {
   return `${y}-${m}-${day}`;
 }
 
-const SENIORS = ['Wakeel', 'Abdallah', 'Leen', 'Enmanuel'];
+const SENIORS = ['Wakeel', 'Shadi', 'Jana', 'Enmanuel'];
 const start = new Date('2026-05-18');
 const end   = new Date('2026-12-28');
 const mondays   = getMondaysInRange(start, end);
@@ -367,7 +367,7 @@ thursdays.forEach((d, i) => {
 });
 
 const months = Array.from({length:8}, (_, i) => new Date(2026, i+4, 1));
-const COACHING_ROTATION = ['Wakeel', 'Abdallah', 'Enmanuel', 'Leen'];  // Leen last
+const COACHING_ROTATION = ['Wakeel', 'Shadi', 'Enmanuel', 'Jana'];  // Jana last
 months.forEach((mo, mi) => {
   // Find 4th business day of the month
   let d = new Date(mo);
@@ -425,12 +425,12 @@ const TASK_CLASS = {
   'Daily Production':'task-daily','Duplicate Removal':'task-duplicate'
 };
 const SENIOR_CLASS = {
-  Wakeel:'senior-wakeel',Abdallah:'senior-abdallah',Leen:'senior-leen',Enmanuel:'senior-enmanuel'
+  Wakeel:'senior-wakeel',Shadi:'senior-shadi',Jana:'senior-jana',Enmanuel:'senior-enmanuel'
 };
 const SENIOR_COLORS = {
   Wakeel:  {bg:'var(--wakeel-bg)',  txt:'var(--wakeel)',  mid:'var(--wakeel-mid)'},
-  Abdallah:{bg:'var(--abdallah-bg)',txt:'var(--abdallah)',mid:'var(--abdallah-mid)'},
-  Leen:    {bg:'var(--leen-bg)',    txt:'var(--leen)',    mid:'var(--leen-mid)'},
+  Shadi:{bg:'var(--shadi-bg)',txt:'var(--shadi)',mid:'var(--shadi-mid)'},
+  Jana:    {bg:'var(--jana-bg)',    txt:'var(--jana)',    mid:'var(--jana-mid)'},
   Enmanuel:{bg:'var(--enmanuel-bg)',txt:'var(--enmanuel)',mid:'var(--enmanuel-mid)'}
 };
 const MONTHS_LABEL = {
