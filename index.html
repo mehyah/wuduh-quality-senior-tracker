@@ -416,13 +416,26 @@ while (dupDay <= end) {
   dupDay.setDate(dupDay.getDate() + 2);  // skip one day each time
 }
 
+
+// WBR, Coaching, and CRF Reports - Weekly Mondays starting Aug 3, 2026
+mondays.filter(d => d >= new Date(2026,7,3)).forEach((d,i)=>{
+  RAW.push({
+    date: fmt(d),
+    task: 'WBR, Coaching, and CRF Reports',
+    senior: SENIORS[i % 4],
+    freq: 'Weekly',
+    day: 'Monday'
+  });
+});
+
 RAW.sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : a.task < b.task ? -1 : 1);
 
 // ─── UI HELPERS ───────────────────────────────────────────────────────────────
 const TASK_CLASS = {
   'WFH Sheet':'task-wfh','QC Headcount':'task-headcount','Payments Sheet':'task-payments',
   'Coaching List':'task-coaching','SMG KPIs':'task-smg','Calibration Plan':'task-calibration',
-  'Daily Production':'task-daily','Duplicate Removal':'task-duplicate'
+  'Daily Production':'task-daily','Duplicate Removal':'task-duplicate',
+  'WBR, Coaching, and CRF Reports':'task-coaching'
 };
 const SENIOR_CLASS = {
   Wakeel:'senior-wakeel',Shadi:'senior-shadi',Jana:'senior-jana',Enmanuel:'senior-enmanuel'
